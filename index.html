@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+  </script>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+  <style> body {
+      background-color: rgba(205, 180, 219, 30%);
+    }
+
+    .card {
+      width: 400px;
+      margin: auto;
+      margin-top: 30px;
+    }
+
+    .input-group-text {
+      width: 100px;
+      display: inline-block;
+    }
+
+    .mycolor {
+      background-color: #6d3b89;
+    }
+
+    .color {
+      color: #6d3b89;
+    }
+
+    .img {
+      width: 60px;
+      margin: auto;
+      display: inline-block;
+    }
+              body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('449704468_862682895881384_8333350447602965702_n.jpg'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #f4f4f4; 
+    margin: 0; 
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9); 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 340px; 
+    height:420px;
+    box-sizing: border-box; 
+}
+
+input, select, button {
+    width: calc(100% - 20px); 
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+p {
+    margin-top: 10px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#login {
+    display: block;
+}
+
+
+   #uid {
+        color: transparent;
+        text-shadow: 0 0 8px #000;
+      }
+  </style>
+  <script>
+    function OpenLoginPage(){
+        google.script.run.withSuccessHandler(ShowRegister).OpenPage("index");
+    }
+   function Login() {
+    var username = document.getElementById("uid").value;
+    var password = document.getElementById("pass").value;
+    
+    google.script.run.withSuccessHandler(function(response) {
+    
+      if (response === "success") {
+      document.getElementById("myid").click();
+      } else {
+        $("#RetMsg").removeClass("alert-danger").removeClass("alert-success").addClass("alert-danger");
+        $("#RetMsg").html("Invalid User ID or Password");
+        $("#RetMsg").show();
+      }
+      }).loginUser(username, password);
+    }
+
+
+  function ClearText()
+  {
+      $('#RetMsg').html("");
+      $('#RetMsg').hide();
+      $('#RetMsgReg').html("");
+      $('#RetMsgReg').hide();
+  }
+
+  function OpenRegisterPage()
+  {
+        google.script.run.withSuccessHandler(ShowRegister).OpenPage("register");
+  }
+
+ function ForgotPassword() {
+        var uid = document.getElementById("uid").value.trim();
+
+        if (uid == "" )
+        {
+            ShowReturnMsg("danger, Please Enter User ID");
+            return;
+        }
+
+        google.script.run.withSuccessHandler(ShowReturnMsg).forgotPass(uid);
+  }
+
+  function ShowReturnMsg(data)
+  {
+      let v = data.split(",");
+      let type=v[0];
+      $('#RetMsg').removeClass("alert-success").removeClass("alert-danger").addClass("alert-"+type);
+      $('#RetMsg').html(v[1]);
+      $('#RetMsg').show();
+  }
+  function ShowRegister(data)
+  {
+    $('#DivLogin').hide();
+    $('#DivRegister').html(data);
+  }
+
+
+
+
+   </script>
+</head>
+<body>
+
+  <div id="DivLogin" >
+      <a style="display:none" id="myid" href="<?= myURL(); ?>" target="_top">Link</a>
+       <div class="container" id="login">
+        <h2>Login</h2>
+        <input type="text" id="uid" placeholder="Enter Username" onchange="ClearText()">
+        <input type="password" id="pass" placeholder="Enter Password" onchange="ClearText()">
+         <div id="RetMsg" class="alert alert-danger " style="display:none" role="alert"></div>  
+        <button onclick="Login()">Login</button>
+
+        <p>No account? <span href="#" onclick="OpenRegisterPage()"><a>Create one</a></span><br>
+        <span href="#"  onclick="ForgotPassword()" class="badge bg-secondary">Forgot Password</span>
+        
+        </p>
+
+    </div>
+      <br>    
+     
+  </div>
+  <div id="DivRegister"></div>
+ 
+</body>
+</html>
