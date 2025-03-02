@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+
+    
+     body {
+        background-color:  rgba(58, 103, 177, 30%);
+      }
+  
+      .card {
+      background: rgba(255, 255, 255, 0.9); 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px; 
+    height:620px;
+    box-sizing: border-box; 
+      }
+  
+      .input-group-text {
+        width: 100px;
+        display: inline-block;
+      }
+  
+      .mycolor {
+         background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+      }
+  
+      .color {
+        color: #3a67b1; 
+      }
+  </style>
+  <script>
+  function SendOTP() {
+      var unm  = document.getElementById("reg_uname").value.trim();
+      var uid  = document.getElementById("reg_uid").value.trim();
+
+      if (unm == "" ) {
+        RegReturnMsg("danger,Please Enter User Name...");
+        return;
+      }
+      if (uid == "") {
+        RegReturnMsg("danger,Please Enter Correct Email ID...");
+        return;
+      }
+
+      google.script.run.withSuccessHandler(RegReturnMsg).sendPassword(uid,unm);
+  }
+  
+  
+  function Register() {
+    var unm    = document.getElementById("reg_uname").value.trim();
+    var uid    = document.getElementById("reg_uid").value.trim();
+    var pass   = document.getElementById("reg_pass").value.trim();
+    var repass = document.getElementById("reg_repass").value.trim();
+    var otp  = document.getElementById("reg_otp").value.trim();
+
+    if (pass != repass) {
+      RegReturnMsg("danger,Password Not Matched...");
+    }
+    else {      google.script.run.withSuccessHandler(RegReturnMsg).CheckOTP(uid,pass,unm,otp);
+    }
+  }
+  
+  function RegReturnMsg(data) {
+      let v = data.split(",");
+      let type=v[0];
+      $('#RetMsgReg').removeClass("alert-success").removeClass("alert-danger").addClass("alert-"+type);
+      $('#RetMsgReg').html(v[1]);
+      $('#RetMsgReg').show();
+      if (type == 'success')
+      {
+        // setTimeout(function(){  
+        //    document.getElementById("myid").click();
+        //    }, 3000);
+      }
+  }</script>
+  </head>
+  <body>
+  <div class="card shadow rounded-4 rounded ">
+  <h5 class="card-header bg-secondary-  p-3 ">User Registration</h5>
+  <div class="card-body p-4">
+    <div id="RegBody">
+      <div class="input-group mb-3">
+     
+        <input type="text" class="form-control" id="reg_uname" placeholder="Enter User Name" onchange="ClearText()">
+      </div>
+
+      <div class="input-group mb-3">
+    
+        <input type="text" class="form-control" id="reg_uid" placeholder="Enter Email ID" onchange="ClearText()">
+      </div>
+
+      <div class="input-group mb-3">
+      
+        <input type="password" class="form-control" id="reg_pass" placeholder="Enter Password" onchange="ClearText()" >
+      </div>
+
+      <div class="input-group mb-3">
+    
+        <input type="password" class="form-control" id="reg_repass" placeholder="Confirm Password" onchange="ClearText()" >
+      </div>
+                <div id="RetMsgReg" class="alert alert-danger " style="display:none" role="alert"> </div>
+
+          <p>Already have an account? <span onclick="OpenLoginPage()">Login here</span></p>
+
+       <div class="input-group mb-3">
+         <div class="input-group-prepend">
+          <button class="btn btn-outline-success mywidth" type="button" onclick="SendOTP()">Send OTP</button>
+          </div>
+        <input type="password" class="form-control" id="reg_otp" placeholder="OTP" onchange="ClearText()" required maxlength="6" >
+
+      <div class="input-group-append">
+          <button type="button" class="btn btn-primary- mycolor float-end px-4 text-white" onclick="Register()">Register</button>
+        </div>
+
+
+    
+
+    
+
+  </div>
+</div>
+    
+  </body>
+</html>
